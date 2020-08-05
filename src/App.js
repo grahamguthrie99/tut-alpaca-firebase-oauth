@@ -1,25 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, Jumbotron, Button } from 'react-bootstrap'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <Container>
+      <Jumbotron>
+        <h1>Alpaca OAuth</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          This is a simple tutorial on how to connect Alpaca to Google Firebase.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <p>
+          <Button variant='primary'>Connect to Alpaca</Button>
+        </p>
+      </Jumbotron>
+    </Container>
   );
 }
 
