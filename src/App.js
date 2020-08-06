@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Jumbotron, Button } from 'react-bootstrap'
+import { Container, Jumbotron } from 'react-bootstrap'
+import AlpacaConnectionButton from './AlpacaComponents/AlpacaConnectionButton';
 
 
 function App() {
@@ -10,9 +11,9 @@ function App() {
         <p>
           This is a simple tutorial on how to connect Alpaca to Google Firebase.
         </p>
-        <p>
-          <Button variant='primary'>Connect to Alpaca</Button>
-        </p>
+        <div>
+          <AlpacaConnectionButton />
+        </div>
       </Jumbotron>
     </Container>
   );
