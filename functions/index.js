@@ -47,6 +47,8 @@ exports.getAlpacaAuthorization = functions.https.onCall(async (data, context) =>
     const accountInfo = await getAlpacaAccountInformation(token)
     const uid = `alpaca:${accountInfo.id}`
 
+    accountInfo.token = token
+
     await updateUserInFirebase(accountInfo, uid)
     await authenticateUserThroughFirebase(uid)
 

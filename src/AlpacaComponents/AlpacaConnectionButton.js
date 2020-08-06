@@ -1,16 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 import { FirebaseContext } from '../config/Firebase/FirebaseContext';
+import { AuthContext } from '../session/AuthContext';
 const crypto = require('crypto')
 
 const client_id = "8f01a49644a85a12d5f7da6ae39e6de2"
 const redirect_uri = encodeURIComponent('http://localhost:3000/')
 
-const AlpacaConnectionButton = () => {
+const AlpacaConnectionButton = ({ props }) => {
     const firebase = useContext(FirebaseContext)
+    const { actions } = useContext(AuthContext)
     const [error, setError] = useState({})
+    const [loading, setLoading] = useState(false)
 
     async function connectToAlpaca() {
+        setLoading(true)
         const random_string = crypto.randomBytes(20).toString('hex')
         const codeURI =
             `https://app.alpaca.markets/oauth/authorize?` +
@@ -24,19 +28,17 @@ const AlpacaConnectionButton = () => {
             if (!requestIsValid(random_string, state)) {
                 throw new Error("Alpaca Authentication Invalid")
             }
-            console.log(state)
-            console.log(code)
             const dev = false
             const getAlpacaAuthorization = firebase.functions.httpsCallable('getAlpacaAuthorization');
-            await getAlpacaAuthorization({ code, dev }).then(function (res) {
-                console.log(res)
-            })
-
+            const { data } = await getAlpacaAuthorization({ code, dev })
+            await actions.login(data)
+            props.history.push("/dashboard");
         }
         catch (e) {
             const error = {}
             error.message = e.message
             setError(error)
+            setLoading(false)
         }
 
     }
@@ -66,9 +68,12 @@ const AlpacaConnectionButton = () => {
 
     return (
         <div>
-            <Button onClick={() => connectToAlpaca()}>
-                Connect To Alpaca
-            </Button>
+            {loading ? <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+                : <Button onClick={() => connectToAlpaca()}>
+                    Connect To Alpaca
+            </Button>}
             {error &&
                 <p>
                     {error.message}

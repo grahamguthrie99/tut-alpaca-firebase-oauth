@@ -1,21 +1,18 @@
 import React from 'react';
-import { Container, Jumbotron } from 'react-bootstrap'
-import AlpacaConnectionButton from './AlpacaComponents/AlpacaConnectionButton';
+import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
+import { Switch, Route } from 'react-router-dom'
+import AuthenticatedRoute from './session/AuthenticatedRoute';
+
 
 
 function App() {
   return (
-    <Container>
-      <Jumbotron>
-        <h1>Alpaca OAuth</h1>
-        <p>
-          This is a simple tutorial on how to connect Alpaca to Google Firebase.
-        </p>
-        <div>
-          <AlpacaConnectionButton />
-        </div>
-      </Jumbotron>
-    </Container>
+    <Switch>
+      <Route exact path="/" component={Landing} />
+      <AuthenticatedRoute exact path="/dashboard" component={Dashboard} />
+    </Switch>
+
   );
 }
 
