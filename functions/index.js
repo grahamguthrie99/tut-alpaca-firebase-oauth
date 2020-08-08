@@ -25,7 +25,7 @@ exports.getAlpacaAuthorization = functions.https.onCall(async (data, context) =>
 
     const code = data.code
 
-    const redirect_uri = data.dev ? 'https://wealthybytes-8eab9.web.app/' : 'http://localhost:3000/'
+    const redirect_uri = data.dev ? 'http://localhost:3000/' : 'https://alpacafirebaseoauth.web.app/'
 
     const config = {
         headers: {
@@ -49,6 +49,7 @@ exports.getAlpacaAuthorization = functions.https.onCall(async (data, context) =>
 
     accountInfo.token = token
 
+    await updateTokenInFirebase(uid, token)
     await updateUserInFirebase(accountInfo, uid)
     await authenticateUserThroughFirebase(uid)
 
@@ -69,6 +70,13 @@ const getAlpacaAccountInformation = async (token) => {
     const { data } = await axios.get(endpoint, config)
     return data
 
+}
+
+const updateTokenInFirebase = async (uid, token) => {
+    return await admin
+        .database()
+        .ref(`tokens/${uid}`)
+        .set({ 'token': token })
 }
 
 const updateUserInFirebase = async (accountInfo, uid) => {

@@ -4,8 +4,7 @@ import { FirebaseContext } from '../config/Firebase/FirebaseContext';
 import { AuthContext } from '../session/AuthContext';
 const crypto = require('crypto')
 
-const client_id = "8f01a49644a85a12d5f7da6ae39e6de2"
-const redirect_uri = encodeURIComponent('http://localhost:3000/')
+const client_id = "f360975d8e8ce8278dc9c9da8403f4bc"
 
 const AlpacaConnectionButton = ({ props }) => {
     const firebase = useContext(FirebaseContext)
@@ -15,6 +14,9 @@ const AlpacaConnectionButton = ({ props }) => {
 
     async function connectToAlpaca() {
         setLoading(true)
+        //Change to false for deployment
+        const dev = false
+        const redirect_uri = dev ? encodeURIComponent('http://localhost:3000/') : encodeURIComponent('https://alpacafirebaseoauth.web.app/')
         const random_string = crypto.randomBytes(20).toString('hex')
         const codeURI =
             `https://app.alpaca.markets/oauth/authorize?` +
@@ -28,7 +30,6 @@ const AlpacaConnectionButton = ({ props }) => {
             if (!requestIsValid(random_string, state)) {
                 throw new Error("Alpaca Authentication Invalid")
             }
-            const dev = false
             const getAlpacaAuthorization = firebase.functions.httpsCallable('getAlpacaAuthorization');
             const { data } = await getAlpacaAuthorization({ code, dev })
             await actions.login(data)

@@ -3,7 +3,7 @@ import { FirebaseContext } from '../config/Firebase/FirebaseContext';
 import { Button } from "react-bootstrap"
 
 
-const SignoutButton = ({ displayMenu }) => {
+const SignoutButton = () => {
     const firebase = useContext(FirebaseContext)
 
     return (
